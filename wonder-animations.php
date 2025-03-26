@@ -46,8 +46,10 @@ function enqueue_block_editor_and_frontend_assets() {
     plugin_dir_url(__FILE__) . 'build/index.js',
     array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor', 'lodash'),
     WONDER_ANIMATIONS_VERSION,
-    'async'
+    array(
+      'strategy' => 'async',
+      'in_footer' => true
+    )
   );
 }
-add_action('enqueue_block_editor_assets', 'enqueue_block_editor_and_frontend_assets');
-add_action('wp_enqueue_scripts', 'enqueue_block_editor_and_frontend_assets');
+add_action('enqueue_block_assets', 'enqueue_block_editor_and_frontend_assets');
