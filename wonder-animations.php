@@ -37,7 +37,7 @@ define('WONDER_ANIMATIONS_VERSION', '1.7.0');
 function enqueue_block_editor_and_frontend_assets() {
   wp_enqueue_style(
     WONDER_ANIMATIONS_PLUGIN_NAME,
-    plugin_dir_url(__FILE__) . 'build/index.css',
+    plugin_dir_url(__FILE__) . 'build/style-index.css',
     array(),
     WONDER_ANIMATIONS_VERSION
   );
