@@ -247,8 +247,6 @@ addFilter(
 const checkForAnimationsInViewport = () => {
 	const elements = document.querySelectorAll( '.animate__animated' );
 
-	console.log( 'checking', elements );
-
 	elements.forEach( ( element ) => {
 		const isInViewport = ( rect ) => {
 			return (
@@ -286,6 +284,8 @@ const checkForAnimationsInViewport = () => {
 				element.style.animationName = element.getAttribute('data-animation-name');
 			}, 100);
 
+			element.classList.remove( 'in-view' );
+		} else {
 			element.classList.remove( 'in-view' );
 		}
 	});
