@@ -7,7 +7,7 @@ Donate link: https://example.com/
 Tags: wordpress, animations, css, frontend  
 Requires at least: 5.0  
 Tested up to: 6.2  
-Stable tag: 1.0.0  
+Stable tag: 1.7.0  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,15 +41,24 @@ Wonder Animations is a WordPress plugin that allows you to add CSS animations to
 ## File Structure
 
 wonder-animations/  
-├── src/  
-│ ├── index.js 
-│ ├── style.scss  
-│ └── utils/
-│   └── fetchAnimateCssClasses.js
-├── build/  
-├── uninstall.php  
-├── wonder-animations.php  
-└── README.md
+├── LICENSE
+├── README.md
+├── build
+│   ├── index.asset.php
+│   ├── index.js
+│   ├── index.js.map
+│   ├── style-index-rtl.css
+│   ├── style-index.css
+│   └── style-index.css.map
+├── package-lock.json
+├── package.json
+├── readme.txt
+├── src
+│   ├── index.js
+│   ├── style.scss
+│   └── utils
+│   └── fetchAnimateCssClasses.js
+└── wonder-animations.php
 
 ## Contributing
 
