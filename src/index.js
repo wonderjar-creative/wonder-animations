@@ -1,4 +1,4 @@
-import './wonder-animate.scss';
+import './style.scss';
 import classnames from 'classnames';
 import { fetchAnimateCssClasses } from './utils/fetchAnimateCssClasses';
 const { assign, merge } = lodash;
@@ -268,21 +268,23 @@ const checkForAnimationsInViewport = () => {
 			// Get the current animation name from the element's inline style
 			const thisAnimName = window.getComputedStyle(element).getPropertyValue('animation-name');
 
+			console.log(thisAnimName);
+
 			// Set the animation name to a data attribute
 			element.setAttribute('data-animation-name', thisAnimName);
 
 			// Set the element's animation name to 'none'
 			element.style.animationName = 'none';
 
-			// Reset the animation name to blank after 200ms
+			// Reset the animation name to blank after 50ms
 			setTimeout(function () {
 				element.style.animationName = '';
-			}, 200);
+			}, 50);
 
-			// Restore the animation name from the data attribute after 400ms
+			// Restore the animation name from the data attribute after 100ms
 			setTimeout(function () {
 				element.style.animationName = element.getAttribute('data-animation-name');
-			}, 400);
+			}, 100);
 		}
 	});
 }
