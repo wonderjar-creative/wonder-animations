@@ -1,0 +1,10 @@
+{
+  "readmeMdPath": "README.md",
+  "changelogMdPath": "CHANGELOG.md",
+  "readmeTxtPath": "README.txt",
+  "styleFiles": [],
+  "phpFiles": ["wonder-animations.php"],
+  "versionPattern": "Version",
+  "versionReplacementPattern": "Version",
+  "stableTagPattern": "Stable tag"
+}
