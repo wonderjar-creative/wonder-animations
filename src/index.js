@@ -1,4 +1,4 @@
-import './utils/wonder-animate.scss';
+import './wonder-animate.scss';
 import classnames from 'classnames';
 import { fetchAnimateCssClasses } from './utils/fetchAnimateCssClasses';
 const { assign, merge } = lodash;
