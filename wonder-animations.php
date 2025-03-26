@@ -34,7 +34,7 @@ define('WONDER_ANIMATIONS_VERSION', '1.7.0');
  * 
  * @since 1.7.0
  */
-function enqueue_block_editor_and_frontend_assets() {
+function wonder_animations_enqueue_block_editor_and_frontend_assets() {
   wp_enqueue_style(
     WONDER_ANIMATIONS_PLUGIN_NAME,
     plugin_dir_url(__FILE__) . 'build/style-index.css',
@@ -52,4 +52,46 @@ function enqueue_block_editor_and_frontend_assets() {
     )
   );
 }
-add_action('enqueue_block_assets', 'enqueue_block_editor_and_frontend_assets');
+add_action('enqueue_block_assets', 'wonder_animations_enqueue_block_editor_and_frontend_assets');
+
+/**
+ * Render dynamic blocks.
+ * 
+ * Check if the block is dynamic and has animation attributes, then add the animation classes to the block's wrapper.
+ * 
+ * @since 1.7.0
+ * @param string $block_content The block's content.
+ * @param array $block The block's attributes.
+ * @return string The block's content with the animation classes added.
+ */
+function wonder_animations_render_dynamic_blocks($block_content, $block) {
+  // Check if the block is dynamic and has animation attributes but no animation classes
+  if (isset($block['attrs']) && ! empty($block['attrs']['waAnimationName']) && strpos($block_content, 'animate__animated') === false) {
+    // Extract animation attributes
+    $animation_name = isset($block['attrs']['waAnimationName']) ? 'animate__' . esc_attr($block['attrs']['waAnimationName']) : '';
+    $animation_delay = isset($block['attrs']['waAnimationDelay']) ? 'animate__' . esc_attr($block['attrs']['waAnimationDelay']) : '';
+    $animation_duration = isset($block['attrs']['waAnimationDuration']) ? 'animate__' . esc_attr($block['attrs']['waAnimationDuration']) : '';
+    $animation_repeat = isset($block['attrs']['waAnimationRepeat']) ? 'animate__' . esc_attr($block['attrs']['waAnimationRepeat']) : '';
+    $reset_view = isset($block['attrs']['waResetView']) ? 'data-wa-reset-view="true"' : '';
+
+    $animation_classes = implode(' ', array_filter([
+      'is-dynamic-block',
+      'animate__animated',
+      $animation_name,
+      $animation_delay,
+      $animation_duration,
+      $animation_repeat,
+    ]));
+
+    // Add the classes to the block's wrapper
+    $block_content = preg_replace(
+      '/class="([^"]*)"/',
+      'class="$1 ' . $animation_classes . '" ' . $reset_view,
+      $block_content,
+      1
+    );
+  }
+
+  return $block_content;
+}
+add_filter('render_block', 'wonder_animations_render_dynamic_blocks', 10, 2);
