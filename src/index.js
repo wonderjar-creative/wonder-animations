@@ -285,6 +285,8 @@ const checkForAnimationsInViewport = () => {
 			setTimeout(function () {
 				element.style.animationName = element.getAttribute('data-animation-name');
 			}, 100);
+
+			element.classList.remove( 'in-view' );
 		}
 	});
 }
