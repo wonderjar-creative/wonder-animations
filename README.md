@@ -1,5 +1,3 @@
-// Use the animate.css stylesheet.@use '../../node_modules/animate.css/animate.css';.animate\_\_animated { &:not(.in-view) { animation-play-state: paused; transform: none !important; visibility: hidden; } &.in-view { opacity: 1; }}
-
 # Wonder Animations
 
 Contributors: wonderjarcreative  
