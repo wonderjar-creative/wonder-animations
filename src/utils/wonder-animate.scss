@@ -1,0 +1,15 @@
+// Use the animate.css stylesheet.
+@use '../../node_modules/animate.css/animate.css';
+
+.animate__animated {
+
+  &:not(.in-view) {
+    animation-play-state: paused;
+    transform: none !important;
+    visibility: hidden;
+  }
+
+  &.in-view {
+    opacity: 1;
+  }
+}

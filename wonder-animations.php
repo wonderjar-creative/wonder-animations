@@ -1,21 +1,20 @@
 <?php
+
 /**
  * Plugin Name:       Wonder Animations
  * Description:       Add animations to your blocks. Powered by the animate.css library.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.6.3
+ * Version:           1.7.0
  * Author:            Matthew Ediger
  * Author URI:        https:wonderjarcreative.com
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       wonder-animations
- *
- * @package CreateBlock
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+if (! defined('ABSPATH')) {
+  exit; // Exit if accessed directly.
 }
 
 /**
@@ -25,19 +24,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  * 
  * @since 0.5.0 Dropped plugin from version constant.
  */
-define( 'WONDER_ANIMATIONS_PLUGIN_NAME', 'wonder-animations' );
-define( 'WONDER_ANIMATIONS_VERSION', '1.6.3' );
+define('WONDER_ANIMATIONS_PLUGIN_NAME', 'wonder-animations');
+define('WONDER_ANIMATIONS_VERSION', '1.7.0');
 
 /**
- * Kickoff main class.
+ * Enqueue block editor assets.
  * 
- * Kickoff the main plugin class.
+ * Add the block editor assets to add animations to blocks.
  * 
- * @since 0.5.0
+ * @since 1.7.0
  */
-function wonder_animations_kickoff_main_class() {
-    require_once plugin_dir_path( __FILE__ ) . 'includes/class-wonder-animations.php';
-    $class = new Wonder_Animations();
-    $class->init();
+function enqueue_block_editor_and_frontend_assets() {
+  wp_enqueue_style(
+    WONDER_ANIMATIONS_PLUGIN_NAME,
+    plugin_dir_url(__FILE__) . 'build/index.css',
+    array(),
+    WONDER_ANIMATIONS_VERSION
+  );
+  wp_enqueue_script(
+    WONDER_ANIMATIONS_PLUGIN_NAME,
+    plugin_dir_url(__FILE__) . 'build/index.js',
+    array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor', 'lodash'),
+    WONDER_ANIMATIONS_VERSION,
+    'async'
+  );
 }
-add_action( 'init', 'wonder_animations_kickoff_main_class' );
+add_action('enqueue_block_editor_assets', 'enqueue_block_editor_and_frontend_assets');
+add_action('wp_enqueue_scripts', 'enqueue_block_editor_and_frontend_assets');

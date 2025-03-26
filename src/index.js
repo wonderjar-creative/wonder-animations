@@ -1,16 +1,7 @@
-
-/**
- * Main index.js file.
- * 
- * @since 0.1.0
- */
-
-/**
- * Define consts.
- */
-//import classnames from 'classnames';
+import './utils/wonder-animate.scss';
+import classnames from 'classnames';
+import { fetchAnimateCssClasses } from './utils/fetchAnimateCssClasses';
 const { assign, merge } = lodash;
-
 const { __ } = wp.i18n;
 const { addFilter } = wp.hooks;
 const { createHigherOrderComponent } = wp.compose;
@@ -88,7 +79,7 @@ const addAnimationAttributeControls = createHigherOrderComponent( ( BlockEdit ) 
 			return <BlockEdit {...props} />;
 		}
 
-		const presetAnimations = wonderAnimations;
+		const presetAnimations = fetchAnimateCssClasses();
 		const animationOptions = [ { label: '', value: '' } ];
 		
 		for (let i = 0; i < presetAnimations.length; i++) {
@@ -167,3 +158,134 @@ addFilter(
 	'wonder-animations/add-animation-attribute-controls',
 	addAnimationAttributeControls
 );
+
+/**
+ * Add animations classes to the block.
+ * 
+ * @since 1.7.0
+ * @param {Object} BlockListBlock Block properties.
+ * @return {Object} Modified block properties.
+ */
+const addAnimationClasses = createHigherOrderComponent( (BlockListBlock) => {
+	return (props) => {
+		const {
+			attributes: { waAnimationName, waAnimationDelay, waAnimationDuration, waAnimationRepeat, waResetView },
+		} = props;
+
+		if ( !waAnimationName ) {
+			return <BlockListBlock {...props} />;
+		}
+
+		const animationClasses = classnames( {
+			[`animate__animated`]: true,
+			[`animate__${waAnimationName}`]: waAnimationName,
+			[`animate__${waAnimationDelay}`]: waAnimationDelay,
+			[`animate__${waAnimationDuration}`]: waAnimationDuration,
+			[`animate__${waAnimationRepeat}`]: waAnimationRepeat,
+		} );
+
+		return (
+			<BlockListBlock {...props} className={ animationClasses } />
+		);
+	}
+}, 'withAddAnimationClasses' );
+addFilter(
+	'editor.BlockListBlock',
+	'wonder-animations/add-animation-classes',
+	addAnimationClasses
+);
+
+/**
+ * Add anmation classes to the front end.
+ * 
+ * @since 1.7.0
+ * @param {Object} props Block properties.
+ * @param {Object} block Block object.
+ * @param {Object} attributes Block attributes.
+ * @return {Object} Modified block properties.
+ */
+function addAnimationClassesFrontEnd(props, block, attributes) {
+	const {
+		waAnimationName,
+		waAnimationDelay,
+		waAnimationDuration,
+		waAnimationRepeat,
+		waResetView
+	} = attributes;
+
+	if ( !waAnimationName ) {
+		return props;
+	}
+
+	const animationClasses = classnames( {
+		[`animate__animated`]: true,
+		[`animate__${waAnimationName}`]: waAnimationName,
+    [`animate__${waAnimationDelay}`]: waAnimationDelay,
+    [`animate__${waAnimationDuration}`]: waAnimationDuration,
+    [`animate__${waAnimationRepeat}`]: waAnimationRepeat,
+	} );
+
+	props.className = classnames( props.className, animationClasses );
+
+	if ( waResetView ) {
+		props['data-wa-reset-view'] = 'true';
+	}
+
+	return props;
+}
+addFilter(
+	'blocks.getSaveContent.extraProps',
+	'wonder-animations/add-animation-classes-front-end',
+	addAnimationClassesFrontEnd
+);
+
+/**
+ * Check for animations in the viewport.
+ * 
+ * @since 1.7.0
+ */
+const checkForAnimationsInViewport = () => {
+	const elements = document.querySelectorAll( '.animate__animated' );
+
+	console.log( 'checking', elements );
+
+	elements.forEach( ( element ) => {
+		const isInViewport = ( rect ) => {
+			return (
+				rect.top >= 0 &&
+				rect.left >= 0 &&
+				rect.bottom <= ( window.innerHeight || document.documentElement.clientHeight ) &&
+				rect.right <= ( window.innerWidth || document.documentElement.clientWidth )
+			);
+		};
+
+		const resetView = element.getAttribute( 'data-wa-reset-view' );
+		const rect = element.getBoundingClientRect();
+
+		if ( isInViewport( rect ) ) {
+			element.classList.add( 'in-view' );
+		} else if ( resetView ) {
+			// Get the current animation name from the element's inline style
+			const thisAnimName = window.getComputedStyle(element).getPropertyValue('animation-name');
+
+			// Set the animation name to a data attribute
+			element.setAttribute('data-animation-name', thisAnimName);
+
+			// Set the element's animation name to 'none'
+			element.style.animationName = 'none';
+
+			// Reset the animation name to blank after 200ms
+			setTimeout(function () {
+				element.style.animationName = '';
+			}, 200);
+
+			// Restore the animation name from the data attribute after 400ms
+			setTimeout(function () {
+				element.style.animationName = element.getAttribute('data-animation-name');
+			}, 400);
+		}
+	});
+}
+document.addEventListener( 'DOMContentLoaded', checkForAnimationsInViewport );
+document.addEventListener( 'scroll', checkForAnimationsInViewport );
+document.addEventListener( 'resize', checkForAnimationsInViewport );
