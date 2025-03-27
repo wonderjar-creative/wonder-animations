@@ -240,56 +240,55 @@ addFilter(
 );
 
 /**
- * Check for animations in the viewport.
+ * Observe animations in the viewport.
  * 
  * @since 1.7.0
  */
-const checkForAnimationsInViewport = () => {
-	const elements = document.querySelectorAll( '.animate__animated' );
+const observeAnimationsInViewport = () => {
+    const elements = document.querySelectorAll('.animate__animated');
 
-	elements.forEach( ( element ) => {
-		const isInViewport = ( rect ) => {
-			return (
-				rect.top >= 0 &&
-				rect.left >= 0 &&
-				rect.bottom <= ( window.innerHeight || document.documentElement.clientHeight ) &&
-				rect.right <= ( window.innerWidth || document.documentElement.clientWidth )
-			);
-		};
+    // Create an Intersection Observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            const element = entry.target;
 
-		const resetView = element.getAttribute( 'data-wa-reset-view' );
-		const rect = element.getBoundingClientRect();
+            if (entry.isIntersecting) {
+                // Element is in the viewport
+                element.classList.add('in-view');
+            } else {
+                // Element is out of the viewport
+                const resetView = element.getAttribute('data-wa-reset-view');
+                if (resetView) {
+                    // Get the current animation name from the element's inline style
+                    const thisAnimName = window.getComputedStyle(element).getPropertyValue('animation-name');
 
-		if ( isInViewport( rect ) ) {
-			element.classList.add( 'in-view' );
-		} else if ( resetView ) {
-			// Get the current animation name from the element's inline style
-			const thisAnimName = window.getComputedStyle(element).getPropertyValue('animation-name');
+                    // Set the animation name to a data attribute
+                    element.setAttribute('data-animation-name', thisAnimName);
 
-			console.log(thisAnimName);
+                    // Set the element's animation name to 'none'
+                    element.style.animationName = 'none';
 
-			// Set the animation name to a data attribute
-			element.setAttribute('data-animation-name', thisAnimName);
+                    // Reset the animation name to blank after 50ms
+                    setTimeout(() => {
+                        element.style.animationName = '';
+                    }, 50);
 
-			// Set the element's animation name to 'none'
-			element.style.animationName = 'none';
+                    // Restore the animation name from the data attribute after 100ms
+                    setTimeout(() => {
+                        element.style.animationName = element.getAttribute('data-animation-name');
+                    }, 100);
 
-			// Reset the animation name to blank after 50ms
-			setTimeout(function () {
-				element.style.animationName = '';
-			}, 50);
+                    element.classList.remove('in-view');
+                } else {
+                    element.classList.remove('in-view');
+                }
+            }
+        });
+    });
 
-			// Restore the animation name from the data attribute after 100ms
-			setTimeout(function () {
-				element.style.animationName = element.getAttribute('data-animation-name');
-			}, 100);
+    // Observe each element
+    elements.forEach((element) => observer.observe(element));
+};
 
-			element.classList.remove( 'in-view' );
-		} else {
-			element.classList.remove( 'in-view' );
-		}
-	});
-}
-document.addEventListener( 'DOMContentLoaded', checkForAnimationsInViewport );
-document.addEventListener( 'scroll', checkForAnimationsInViewport );
-document.addEventListener( 'resize', checkForAnimationsInViewport );
+// Initialize the observer when the DOM is ready
+document.addEventListener('DOMContentLoaded', observeAnimationsInViewport);
