@@ -5,7 +5,7 @@
  * Description:       Add animations to your blocks. Powered by the animate.css library.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.7.0
+ * Version:           1.8.0
  * Author:            Matthew Ediger
  * Author URI:        https:wonderjarcreative.com
  * License:           GPL-2.0-or-later
