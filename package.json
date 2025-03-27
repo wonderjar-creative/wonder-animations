@@ -1,6 +1,6 @@
 {
   "name": "wonder-animations",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Add animations to your blocks. Powered by the animate.css library",
   "main": "index.js",
   "scripts": {
