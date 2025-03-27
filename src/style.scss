@@ -1,15 +1,17 @@
 // Use the animate.css stylesheet.
 @use '../node_modules/animate.css/animate.css';
 
-.animate__animated {
+body:not(.block-editor-page) {
+  .animate__animated {
 
-  &:not(.in-view) {
-    animation-play-state: paused;
-    transform: none !important;
-    visibility: hidden;
-  }
+    &:not(.in-view) {
+      animation-play-state: paused;
+      transform: none !important;
+      visibility: hidden;
+    }
 
-  &.in-view {
-    opacity: 1;
+    &.in-view {
+      opacity: 1;
+    }
   }
 }
