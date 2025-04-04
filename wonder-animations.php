@@ -32,6 +32,7 @@ define('WONDER_ANIMATIONS_VERSION', '1.8.1');
  * 
  * Add the block editor assets to add animations to blocks.
  * 
+ * @since 1.9.0 Removed async attribute from script enqueue.
  * @since 1.7.0
  */
 function wonder_animations_enqueue_block_editor_and_frontend_assets() {
@@ -47,7 +48,6 @@ function wonder_animations_enqueue_block_editor_and_frontend_assets() {
     array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor', 'lodash'),
     WONDER_ANIMATIONS_VERSION,
     array(
-      'strategy' => 'async',
       'in_footer' => true
     )
   );
