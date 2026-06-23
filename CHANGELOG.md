@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.9.1] - 2026-06-23
+
 ### Fixed
 
 - Front end no longer loads the block editor stack. The editor bundle (which depends on `wp-editor` and pulls in `wp-core-data`) previously loaded on every front-end page via `enqueue_block_assets`, triggering a `wp/v2/users/me?context=edit` request that 401s for logged-out visitors. The resulting unhandled promise rejection could break the hydration of other blocks on the page (e.g. the WooCommerce Cart/Checkout blocks on WebKit).
